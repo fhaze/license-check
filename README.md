@@ -8,6 +8,7 @@ Check your project dependencies linceses and verify if you are using a forbidden
 docker build . -t license-check
 docker run -it -v $(pwd)/hoge-project:/code license-check
 ```
+> Replace `hoge-project` for your project folder.
 
 ```shell
 Name                               Version                             License       Check

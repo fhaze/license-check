@@ -5,7 +5,8 @@ Check your project dependencies linceses and verify if you are using a forbidden
 ## 🚀 Usage Example
 
 ```shell
-docker run -it -v $(pwd)/discord-22-api:/code fhaze/license-check
+docker build . -t license-check
+docker run -it -v $(pwd)/hoge-project:/code license-check
 ```
 
 ```shell

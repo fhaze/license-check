@@ -7,14 +7,14 @@ cd /code
 bom_go() {
   cyclonedx-gomod mod -json -licenses \
     | jq .components \
-    | jq '.[]|{"Name":.name,"Version":.version,"License":.evidence.licenses[0].license.id}' > bom.formated.json
+    | jq '.[]|{"Name":.name,"Version":.version,"License":(.evidence.licenses[0].license.id // "Unknown")}' > bom.formated.json
 }
 
 bom_node() {
   cyclonedx-node -o bom.json
   cat ./bom.json \
     | jq .components \
-    | jq '.[]|{"Name":.name,"Version":.version,"License":.licenses[0].license.id}' > bom.formated.json
+    | jq '.[]|{"Name":.name,"Version":.version,"License":(.licenses[0].license.id // "Unknown")}' > bom.formated.json
   rm bom.json
 }
 

@@ -15,6 +15,12 @@ bom_node() {
   cat ./bom.json \
     | jq .components \
     | jq '.[]|{"Name":.name,"Version":.version,"License":.licenses[0].license.id}' > bom.formated.json
+  rm bom.json
+}
+
+bom_python() {
+  pip3 install -q -r requirements.txt
+  /usr/local/bin/pip-licenses -f json | jq '.[]' > bom.formated.json
 }
 
 if [ -e go.mod ]; then
@@ -22,8 +28,7 @@ if [ -e go.mod ]; then
 elif [ -e package.json ]; then
   bom_node
 elif [ -e requirements.txt ] || [ -e setup.py ]; then
-  echo "Error: Python not supported for now"
-  exit 1
+  bom_python
 else
   echo "Error: Could not auto detect the project type"
   exit 1
@@ -33,4 +38,6 @@ cat ./bom.formated.json \
   | jq '{Name,Version,License,"Check": (if (.License | test("^AGPL|^CC-BY-NC|Commons-Clause|^Facebook|WTFPL")) then "Forbidden" else "OK" end)}' \
   | jq -s 'sort_by(.Check, .License, .Name)' \
   | jtbl
+
+rm bom.formated.json
 exit 0

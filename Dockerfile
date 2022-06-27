@@ -18,8 +18,8 @@ RUN wget https://go.dev/dl/go1.18.3.linux-amd64.tar.gz
 RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.18.3.linux-amd64.tar.gz
 RUN /usr/local/go/bin/go install github.com/CycloneDX/cyclonedx-gomod/cmd/cyclonedx-gomod@latest
 
-# Install Python 3 and dependencies for formating json output
+# Install Python 3 & CycloneDX for Python and dependencies for formating json output
 RUN apt install -y python3 python3-pip jq
-RUN pip3 install jtbl
+RUN pip3 install jtbl pip-licenses
 
 CMD ["/work/entrypoint.sh"]

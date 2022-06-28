@@ -23,12 +23,22 @@ bom_python() {
   /usr/local/bin/pip-licenses -f json | jq '.[]' > bom.formated.json
 }
 
+bom_conan() {
+  if [ -e remotes.txt ]; then
+    conan config install remotes.txt > /dev/null 2>&1
+  fi
+  conan install . > /dev/null 2>&1
+  conan info . -j | jq '.[]|{"Name":.reference | split("/")[0],"Version": .reference | split("/")[1],"License":(.license[0] // "Unknown")}' > bom.formated.json
+}
+
 if [ -e go.mod ]; then
   bom_go
 elif [ -e package.json ]; then
   bom_node
-elif [ -e requirements.txt ] || [ -e setup.py ]; then
+elif [ -e requirements.txt ]; then
   bom_python
+elif [ -e conanfile.txt ]; then
+  bom_conan
 else
   echo "Error: Could not auto detect the project type"
   exit 1

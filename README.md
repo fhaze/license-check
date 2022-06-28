@@ -4,11 +4,22 @@ Check your project dependencies linceses and verify if you are using a forbidden
 
 ## 🚀 Usage Example
 
+Use the already built image from my Dockerhub
+
+```shell
+docker run -it -v /some/dir/hoge-project:/code license-check
+```
+
+> Replace `/some/dir/hoge-project` with your project absolute directory
+
+or build it yourself
+
 ```shell
 docker build . -t license-check
 docker run -it -v $(pwd)/hoge-project:/code license-check
 ```
-> Replace `hoge-project` for your project folder.
+
+Output Example
 
 ```shell
 Name                               Version                             License       Check

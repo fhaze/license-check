@@ -1,6 +1,6 @@
 #!/bin/bash
-export PATH=$PATH:/usr/local/go/bin:/root/go/bin
-echo "PATH=$PATH:/usr/local/go/bin:/root/go/bin" >> /root/.bashrc
+export PATH=$PATH:/usr/local/go/bin:/root/go/bin:/root/.local/bin
+echo "PATH=$PATH:/usr/local/go/bin:/root/go/bin:/root/.local/bin" >> /root/.bashrc
 
 cd /code
 
@@ -18,9 +18,17 @@ bom_node() {
   rm bom.json
 }
 
-bom_python() {
-  pip3 install -q -r requirements.txt
-  /usr/local/bin/pip-licenses -f json | jq '.[]' > bom.formated.json
+bom_python_pipfile() {
+  /root/.local/bin/pipenv lock -r > requirements.txt  
+}
+
+bom_python_requirements() {
+  virtualenv bom-venv > /dev/null 2>&1
+  . bom-venv/bin/activate
+  pip3 install -q -r requirements.txt > /dev/null 2>&1
+  pip3 install pip-licenses > /dev/null 2>&1
+  pip-licenses -f json | jq '.[]' > bom.formated.json
+  rm -rf ./bom-venv
 }
 
 bom_conan() {
@@ -36,7 +44,10 @@ if [ -e go.mod ]; then
 elif [ -e package.json ]; then
   bom_node
 elif [ -e requirements.txt ]; then
-  bom_python
+  bom_python_requirements
+elif [ -e Pipfile ]; then
+  bom_python_pipfile
+  bom_python_requirements
 elif [ -e conanfile.txt ]; then
   bom_conan
 else
@@ -47,6 +58,7 @@ fi
 cat ./bom.formated.json \
   | jq '{Name,Version,License,"Check": (if (.License | test("^AGPL|^CC-BY-NC|Commons-Clause|^Facebook|WTFPL")) then "Forbidden" else "OK" end)}' \
   | jq -s 'sort_by(.Check, .License, .Name)' > ./bom.validated.json
+rm ./bom.formated.json
 
 case $FORMAT in
   csv)
@@ -63,5 +75,5 @@ case $FORMAT in
     ;;
 esac
 
-rm bom.formated.json
+rm ./bom.validated.json
 exit 0

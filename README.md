@@ -19,13 +19,13 @@ docker build . -t license-check
 docker run -it -v /some/dir/hoge-project:/code license-check
 ```
 
-### Supported project languages
+## 💬 Supported project languages
 - go
 - python3 (using requirements.txt file)
 - nodejs
 - c++ (using conan)
 
-### Supported output formats
+## 📦 Supported output formats
 - table (default)
 - json
 - csv

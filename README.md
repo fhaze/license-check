@@ -7,7 +7,7 @@ Check your project dependencies linceses and verify if you are using a forbidden
 Use the already built image from my Dockerhub
 
 ```shell
-docker run -it -v /some/dir/hoge-project:/code license-check
+docker run -it -v /some/dir/hoge-project:/code fhaze/license-check
 ```
 
 > Replace `/some/dir/hoge-project` with your project absolute directory

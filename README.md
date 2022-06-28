@@ -16,7 +16,7 @@ or build it yourself
 
 ```shell
 docker build . -t license-check
-docker run -it -v /some/dir/hoge-project:/code fhaze/license-check
+docker run -it -v /some/dir/hoge-project:/code license-check
 ```
 
 ### Supported project languages

@@ -46,8 +46,22 @@ fi
 
 cat ./bom.formated.json \
   | jq '{Name,Version,License,"Check": (if (.License | test("^AGPL|^CC-BY-NC|Commons-Clause|^Facebook|WTFPL")) then "Forbidden" else "OK" end)}' \
-  | jq -s 'sort_by(.Check, .License, .Name)' \
-  | jtbl
+  | jq -s 'sort_by(.Check, .License, .Name)' > ./bom.validated.json
+
+case $FORMAT in
+  csv)
+    cat ./bom.validated.json | dasel -r json -w csv
+    ;;
+  json)
+    cat ./bom.validated.json | jq
+    ;;
+  table)
+    cat ./bom.validated.json | jtbl
+    ;;
+  *)
+    cat ./bom.validated.json | jtbl
+    ;;
+esac
 
 rm bom.formated.json
 exit 0

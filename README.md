@@ -16,12 +16,26 @@ or build it yourself
 
 ```shell
 docker build . -t license-check
-docker run -it -v $(pwd)/hoge-project:/code license-check
+docker run -it -v /some/dir/hoge-project:/code fhaze/license-check
 ```
 
-Output Example
+### Supported project languages
+- go
+- python3 (using requirements.txt file)
+- nodejs
+- c++ (using conan)
+
+### Supported output formats
+- table (default)
+- json
+- csv
+
+> Change the output by setting `-e FORMAT=table|json|csv` to the `docker run` command
+
+Default output example (`FORMAT=table`)
 
 ```shell
+$ docker run -e -it -v /some/dir/hoge-project:/code fhaze/license-check
 Name                               Version                             License       Check
 ---------------------------------  ----------------------------------  ------------  -------
 github.com/klauspost/compress      v1.13.6                             Apache-2.0    OK

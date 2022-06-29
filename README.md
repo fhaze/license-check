@@ -35,7 +35,7 @@ docker run -it -v /some/dir/hoge-project:/code license-check
 Default output example (`FORMAT=table`)
 
 ```shell
-$ docker run -e -it -v /some/dir/hoge-project:/code fhaze/license-check
+$ docker run -e FORMAT=table -it -v /some/dir/hoge-project:/code fhaze/license-check
 Name                               Version                             License       Check
 ---------------------------------  ----------------------------------  ------------  -------
 github.com/klauspost/compress      v1.13.6                             Apache-2.0    OK

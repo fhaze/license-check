@@ -22,7 +22,7 @@ RUN /usr/local/go/bin/go install github.com/CycloneDX/cyclonedx-gomod/cmd/cyclon
 # Install Python 3 & CycloneDX for conan and dependencies for formating json/table/csv output
 RUN apt install -y python3.8 python3-pip jq
 RUN pip3 install --user jtbl cyclonedx-conan
-RUN pip3 install --user 'conan==1.47.0' # forcing this because the last version (1.48.x) is broken
+RUN pip3 install --user 'conan==1.54.0'
 RUN pip3 install --user pipenv
 RUN curl -sSLf "$(curl -sSLf https://api.github.com/repos/tomwright/dasel/releases/latest | grep browser_download_url | grep linux_amd64 | grep -v .gz | cut -d\" -f 4)" -L -o dasel && chmod +x dasel
 RUN mv ./dasel /usr/local/bin/dasel

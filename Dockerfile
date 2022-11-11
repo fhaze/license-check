@@ -12,7 +12,7 @@ RUN apt install -y git wget curl
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt install -y nodejs
 RUN npm install --global yarn
-RUN yarn global add @cyclonedx/bom
+RUN yarn global add @cyclonedx/bom@3.10.6
 
 # Install Go & CycloneDX for Go
 RUN wget https://go.dev/dl/go1.18.3.linux-amd64.tar.gz
@@ -26,5 +26,9 @@ RUN pip3 install --user 'conan==1.54.0'
 RUN pip3 install --user pipenv
 RUN curl -sSLf "$(curl -sSLf https://api.github.com/repos/tomwright/dasel/releases/latest | grep browser_download_url | grep linux_amd64 | grep -v .gz | cut -d\" -f 4)" -L -o dasel && chmod +x dasel
 RUN mv ./dasel /usr/local/bin/dasel
+
+# Install Open JDK 11 and Maven
+RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
+RUN apt install -y openjdk-11-jdk maven
 
 CMD ["/work/entrypoint.sh"]

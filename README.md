@@ -20,10 +20,11 @@ docker run -it -v /some/dir/hoge-project:/code license-check
 ```
 
 ## 💬 Supported package managers
-- [Golang](https://go.dev/doc/modules/managing-dependencies)
+- [Go Mod](https://go.dev/ref/mod)
 - [Python3.8](https://packaging.python.org/en/latest/tutorials/installing-packages/) (using requirements.txt or Pyfile)
 - [npm](https://docs.npmjs.com/about-npm)
 - [Conan](https://conan.io/) (C/C++)
+- [Maven](https://maven.apache.org) (Java)
 
 ## 📦 Supported output formats
 - table (default)

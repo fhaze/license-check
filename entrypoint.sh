@@ -39,6 +39,13 @@ bom_conan() {
   conan info . -j | jq '.[]|{"Name":.reference | split("/")[0],"Version": .reference | split("/")[1],"License":(.license[0] // "Unknown")}' > bom.formated.json
 }
 
+bom_maven() {
+  mvn org.cyclonedx:cyclonedx-maven-plugin:2.7.3:makeBom > /dev/null 2>&1
+  cat target/bom.json \
+    | jq '.components' \
+    | jq '.[]|{"Name":.name,"Version":.version,"License":(.licenses[0].license.id // "Unknown")}' > bom.formated.json
+}
+
 if [ -e go.mod ]; then
   bom_go
 elif [ -e package.json ]; then
@@ -50,6 +57,8 @@ elif [ -e Pipfile ]; then
   bom_python_requirements
 elif [ -e conanfile.txt ]; then
   bom_conan
+elif [ -e pom.xml ]; then
+  bom_maven
 else
   echo "Error: Could not auto detect the project type"
   exit 1

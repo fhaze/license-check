@@ -1,6 +1,6 @@
 # License Check
 
-Check your project dependencies linceses and verify if you are using a forbidden license for commercial usage.
+Check your project dependencies licenses and verify if you are using a forbidden license for commercial usage.
 
 ## 🚀 Usage Example
 
@@ -19,11 +19,11 @@ docker build . -t license-check
 docker run -it -v /some/dir/hoge-project:/code license-check
 ```
 
-## 💬 Supported project languages
-- go
-- python3.8 (using requirements.txt or Pyfile)
-- nodejs
-- c++ (using conan)
+## 💬 Supported package managers
+- [Golang](https://go.dev/doc/modules/managing-dependencies)
+- [Python3.8](https://packaging.python.org/en/latest/tutorials/installing-packages/) (using requirements.txt or Pyfile)
+- [npm](https://docs.npmjs.com/about-npm)
+- [Conan](https://conan.io/) (C/C++)
 
 ## 📦 Supported output formats
 - table (default)
@@ -35,7 +35,7 @@ docker run -it -v /some/dir/hoge-project:/code license-check
 Default output example (`FORMAT=table`)
 
 ```shell
-$ docker run -e -it -v /some/dir/hoge-project:/code fhaze/license-check
+$ docker run -e FORMAT=table -it -v /some/dir/hoge-project:/code fhaze/license-check
 Name                               Version                             License       Check
 ---------------------------------  ----------------------------------  ------------  -------
 github.com/klauspost/compress      v1.13.6                             Apache-2.0    OK

@@ -23,30 +23,53 @@ bom_python_pipfile() {
 }
 
 bom_python_requirements() {
-  virtualenv bom-venv > /dev/null 2>&1
-  . bom-venv/bin/activate
-  pip3 install -q -r requirements.txt > /dev/null 2>&1
-  pip3 install pip-licenses > /dev/null 2>&1
+  if [[ $DEBUG == "1" ]]; then
+    virtualenv bom-venv
+    . bom-venv/bin/activate
+    pip3 install -q -r requirements.txt
+    pip3 install pip-licenses
+  else
+    virtualenv bom-venv > /dev/null 2>&1
+    . bom-venv/bin/activate
+    pip3 install -q -r requirements.txt > /dev/null 2>&1
+    pip3 install pip-licenses > /dev/null 2>&1
+  fi
   pip-licenses -f json | jq '.[]' > bom.formated.json
   rm -rf ./bom-venv
 }
 
 bom_conan() {
   if [ -e remotes.txt ]; then
-    conan config install remotes.txt > /dev/null 2>&1
+    if [[ $DEBUG == "1" ]]; then
+      conan config install remotes.txt
+    else
+      conan config install remotes.txt > /dev/null 2>&1
+    fi
   fi
   conan install . > /dev/null 2>&1
   conan info . -j | jq '.[]|{"Name":.reference | split("/")[0],"Version": .reference | split("/")[1],"License":(.license[0] // "Unknown")}' > bom.formated.json
 }
 
 bom_maven() {
-  mvn org.cyclonedx:cyclonedx-maven-plugin:2.7.3:makeBom > /dev/null 2>&1
+  if [[ $DEBUG == "1" ]]; then
+    mvn org.cyclonedx:cyclonedx-maven-plugin:2.7.3:makeAggregateBom
+  else
+    mvn org.cyclonedx:cyclonedx-maven-plugin:2.7.3:makeAggregateBom > /dev/null 2>&1
+  fi
   cat target/bom.json \
     | jq '.components' \
     | jq '.[]|{"Name":.name,"Version":.version,"License":(.licenses[0].license.id // "Unknown")}' > bom.formated.json
 }
 
-if [ -e go.mod ]; then
+bom_exists() {
+  cat target/bom.json \
+    | jq '.components' \
+    | jq '.[]|{"Name":.name,"Version":.version,"License":(.licenses[0].license.id // "Unknown")}' > bom.formated.json
+}
+
+if [ -e target/bom.json ]; then
+  bom_exists
+elif [ -e go.mod ]; then
   bom_go
 elif [ -e package.json ]; then
   bom_node

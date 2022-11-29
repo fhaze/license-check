@@ -33,7 +33,7 @@ docker run -it -v /some/dir/hoge-project:/code license-check
 
 > Change the output by setting `-e FORMAT=table|json|csv` to the `docker run` command
 
-Default output example (`FORMAT=table`)
+Default output example `FORMAT=table`
 
 ```shell
 $ docker run -e FORMAT=table -it -v /some/dir/hoge-project:/code fhaze/license-check
@@ -62,4 +62,22 @@ github.com/sirupsen/logrus         v1.8.1                              MIT      
 github.com/valyala/bytebufferpool  v1.0.0                              MIT           OK
 github.com/valyala/fasttemplate    v1.2.1                              MIT           OK
 github.com/youmark/pkcs8           v0.0.0-20181117223130-1be2e3e5546d  MIT           OK
+```
+
+## 🔒 Workaround for private libraries
+
+Because `license-check` doesn't inject your credentials to access private repositories, you may need to generate the `bom.json` manually.
+
+### Maven (Java)
+
+Generate the `bom.json` using cyclonedx:
+
+```shell
+mvn org.cyclonedx:cyclonedx-maven-plugin:2.7.3:makeAggregateBom
+```
+
+Now execute `license-check` tool:
+
+```shell
+$ docker run -e FORMAT=table -it -v $(pwd):/code fhaze/license-check
 ```
